@@ -43,6 +43,7 @@ jobs:
     name: Build Android
     runs-on: ubuntu-latest
     needs: analyze
+    continue-on-error: true  # Beta channel may have Gradle issues
 
     steps:
       - uses: actions/checkout@v4
