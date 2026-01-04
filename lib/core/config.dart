@@ -12,15 +12,15 @@ class AppConfig {
   /// Development: http://10.0.2.2:8000/api (Android emulator)
   static const String baseUrl = String.fromEnvironment(
     'API_BASE_URL',
-    defaultValue: 'http://10.0.2.2:8000/api',
+    defaultValue: 'http://10.0.2.2:8081/api',
   );
 
   /// WebSocket URL
   /// Production: wss://api.yourserver.com/api/ws
-  /// Development: ws://10.0.2.2:8000/api/ws (Android emulator)
+  /// Development: ws://10.0.2.2:8081/api/ws (Android emulator)
   static const String wsUrl = String.fromEnvironment(
     'WS_URL',
-    defaultValue: 'ws://10.0.2.2:8000/api/ws',
+    defaultValue: 'ws://10.0.2.2:8081/api/ws',
   );
 
   /// Connection timeout in milliseconds

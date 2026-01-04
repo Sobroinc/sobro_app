@@ -186,7 +186,7 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
           },
         ),
 
-        // Page indicator
+        // Page indicator (limit to max 7 visible dots to prevent overflow)
         if (images.length > 1)
           Positioned(
             bottom: 16,
@@ -194,20 +194,8 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
             right: 0,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(
-                images.length,
-                (index) => Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 4),
-                  width: _currentPage == index ? 24 : 8,
-                  height: 8,
-                  decoration: BoxDecoration(
-                    color: _currentPage == index
-                        ? Theme.of(context).colorScheme.primary
-                        : Colors.white.withAlpha(128),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                ),
-              ),
+              mainAxisSize: MainAxisSize.min,
+              children: _buildPageIndicators(context, images.length),
             ),
           ),
 
@@ -229,6 +217,65 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
             ),
           ),
       ],
+    );
+  }
+
+  List<Widget> _buildPageIndicators(BuildContext context, int totalImages) {
+    const maxDots = 7;
+
+    // If few images, show all dots
+    if (totalImages <= maxDots) {
+      return List.generate(
+        totalImages,
+        (index) => _buildDot(context, index, _currentPage == index),
+      );
+    }
+
+    // For many images, show sliding window of dots
+    final indicators = <Widget>[];
+    final halfWindow = maxDots ~/ 2;
+
+    int start = (_currentPage - halfWindow).clamp(0, totalImages - maxDots);
+    int end = start + maxDots;
+
+    if (start > 0) {
+      indicators.add(_buildDot(context, 0, _currentPage == 0, isSmall: true));
+    }
+
+    for (int i = start; i < end; i++) {
+      indicators.add(_buildDot(context, i, _currentPage == i));
+    }
+
+    if (end < totalImages) {
+      indicators.add(
+        _buildDot(
+          context,
+          totalImages - 1,
+          _currentPage == totalImages - 1,
+          isSmall: true,
+        ),
+      );
+    }
+
+    return indicators;
+  }
+
+  Widget _buildDot(
+    BuildContext context,
+    int index,
+    bool isActive, {
+    bool isSmall = false,
+  }) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 3),
+      width: isActive ? 20 : (isSmall ? 4 : 6),
+      height: isSmall ? 4 : 6,
+      decoration: BoxDecoration(
+        color: isActive
+            ? Theme.of(context).colorScheme.primary
+            : Colors.white.withAlpha(128),
+        borderRadius: BorderRadius.circular(3),
+      ),
     );
   }
 
