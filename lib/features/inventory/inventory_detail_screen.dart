@@ -12,7 +12,8 @@ class InventoryDetailScreen extends ConsumerStatefulWidget {
   const InventoryDetailScreen({super.key, required this.itemId});
 
   @override
-  ConsumerState<InventoryDetailScreen> createState() => _InventoryDetailScreenState();
+  ConsumerState<InventoryDetailScreen> createState() =>
+      _InventoryDetailScreenState();
 }
 
 class _InventoryDetailScreenState extends ConsumerState<InventoryDetailScreen> {
@@ -39,7 +40,8 @@ class _InventoryDetailScreenState extends ConsumerState<InventoryDetailScreen> {
               Text(error.toString()),
               const SizedBox(height: 16),
               FilledButton(
-                onPressed: () => ref.invalidate(inventoryDetailProvider(widget.itemId)),
+                onPressed: () =>
+                    ref.invalidate(inventoryDetailProvider(widget.itemId)),
                 child: const Text('Retry'),
               ),
             ],
@@ -64,9 +66,7 @@ class _InventoryDetailScreenState extends ConsumerState<InventoryDetailScreen> {
         SliverAppBar(
           expandedHeight: 300,
           pinned: true,
-          flexibleSpace: FlexibleSpaceBar(
-            background: _buildImageGallery(item),
-          ),
+          flexibleSpace: FlexibleSpaceBar(background: _buildImageGallery(item)),
         ),
         SliverToBoxAdapter(
           child: Padding(
@@ -83,30 +83,45 @@ class _InventoryDetailScreenState extends ConsumerState<InventoryDetailScreen> {
                 const SizedBox(height: 16),
                 if (item.manufacturer != null || item.model != null)
                   _buildInfoCard([
-                    if (item.manufacturer != null) _buildRow('Manufacturer', item.manufacturer!),
+                    if (item.manufacturer != null)
+                      _buildRow('Manufacturer', item.manufacturer!),
                     if (item.model != null) _buildRow('Model', item.model!),
-                    if (item.year != null) _buildRow('Year', item.year.toString()),
-                    if (item.serialNumber != null) _buildRow('Serial #', item.serialNumber!),
-                    if (item.condition != null) _buildRow('Condition', item.condition!),
+                    if (item.year != null)
+                      _buildRow('Year', item.year.toString()),
+                    if (item.serialNumber != null)
+                      _buildRow('Serial #', item.serialNumber!),
+                    if (item.condition != null)
+                      _buildRow('Condition', item.condition!),
                   ]),
                 const SizedBox(height: 16),
                 _buildInfoCard([
                   _buildRow('Quantity', item.quantity.toString()),
-                  if (item.location != null) _buildRow('Location', item.location!),
+                  if (item.location != null)
+                    _buildRow('Location', item.location!),
                   if (item.city != null) _buildRow('City', item.city!),
                 ]),
                 if (item.salePrice != null || item.purchasePrice != null) ...[
                   const SizedBox(height: 16),
                   _buildInfoCard([
                     if (item.purchasePrice != null)
-                      _buildRow('Purchase Price', '\$${item.purchasePrice!.toStringAsFixed(0)}'),
+                      _buildRow(
+                        'Purchase Price',
+                        '\$${item.purchasePrice!.toStringAsFixed(0)}',
+                      ),
                     if (item.salePrice != null)
-                      _buildRow('Sale Price', '\$${item.salePrice!.toStringAsFixed(0)}'),
+                      _buildRow(
+                        'Sale Price',
+                        '\$${item.salePrice!.toStringAsFixed(0)}',
+                      ),
                   ]),
                 ],
-                if (item.description != null && item.description!.isNotEmpty) ...[
+                if (item.description != null &&
+                    item.description!.isNotEmpty) ...[
                   const SizedBox(height: 16),
-                  Text('Description', style: Theme.of(context).textTheme.titleMedium),
+                  Text(
+                    'Description',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
                   const SizedBox(height: 8),
                   Text(item.description!),
                 ],
@@ -123,7 +138,9 @@ class _InventoryDetailScreenState extends ConsumerState<InventoryDetailScreen> {
     if (item.photos.isEmpty) {
       return Container(
         color: Colors.grey.shade200,
-        child: const Center(child: Icon(Icons.image_not_supported, size: 64, color: Colors.grey)),
+        child: const Center(
+          child: Icon(Icons.image_not_supported, size: 64, color: Colors.grey),
+        ),
       );
     }
 
@@ -196,7 +213,12 @@ class _InventoryDetailScreenState extends ConsumerState<InventoryDetailScreen> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant)),
+          Text(
+            label,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
           Text(value, style: const TextStyle(fontWeight: FontWeight.w500)),
         ],
       ),

@@ -132,10 +132,7 @@ class _AuctionCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // Image
-            SizedBox(
-              height: 180,
-              child: _buildImage(),
-            ),
+            SizedBox(height: 180, child: _buildImage()),
 
             // Content
             Padding(
@@ -161,16 +158,22 @@ class _AuctionCard extends StatelessWidget {
                           children: [
                             Text(
                               'Current Bid',
-                              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: Theme.of(context).colorScheme.onSurfaceVariant,
-                              ),
+                              style: Theme.of(context).textTheme.bodySmall
+                                  ?.copyWith(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurfaceVariant,
+                                  ),
                             ),
                             Text(
                               '\$${auction.currentPrice.toStringAsFixed(0)}',
-                              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: Theme.of(context).textTheme.headlineSmall
+                                  ?.copyWith(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.primary,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                             ),
                           ],
                         ),
@@ -180,9 +183,12 @@ class _AuctionCard extends StatelessWidget {
                         children: [
                           Text(
                             'Time Left',
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
-                            ),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onSurfaceVariant,
+                                ),
                           ),
                           Container(
                             padding: const EdgeInsets.symmetric(
@@ -192,17 +198,24 @@ class _AuctionCard extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: auction.isEnding
                                   ? Theme.of(context).colorScheme.errorContainer
-                                  : Theme.of(context).colorScheme.primaryContainer,
+                                  : Theme.of(
+                                      context,
+                                    ).colorScheme.primaryContainer,
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: Text(
                               auction.timeRemaining,
-                              style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                color: auction.isEnding
-                                    ? Theme.of(context).colorScheme.onErrorContainer
-                                    : Theme.of(context).colorScheme.onPrimaryContainer,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: Theme.of(context).textTheme.titleSmall
+                                  ?.copyWith(
+                                    color: auction.isEnding
+                                        ? Theme.of(
+                                            context,
+                                          ).colorScheme.onErrorContainer
+                                        : Theme.of(
+                                            context,
+                                          ).colorScheme.onPrimaryContainer,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                             ),
                           ),
                         ],
@@ -236,9 +249,10 @@ class _AuctionCard extends StatelessWidget {
                         Expanded(
                           child: Text(
                             auction.winnerName!,
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Theme.of(context).colorScheme.tertiary,
-                            ),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(
+                                  color: Theme.of(context).colorScheme.tertiary,
+                                ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -259,11 +273,7 @@ class _AuctionCard extends StatelessWidget {
     if (auction.imageUrl == null) {
       return Container(
         color: Colors.grey.shade200,
-        child: const Icon(
-          Icons.gavel,
-          size: 48,
-          color: Colors.grey,
-        ),
+        child: const Icon(Icons.gavel, size: 48, color: Colors.grey),
       );
     }
 

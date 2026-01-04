@@ -66,9 +66,9 @@ class SettingsScreen extends ConsumerWidget {
             leading: const Icon(Icons.bug_report_outlined),
             title: const Text('Clear Cache'),
             onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Cache cleared')),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(const SnackBar(content: Text('Cache cleared')));
             },
           ),
           ListTile(
@@ -96,7 +96,11 @@ class SettingsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildThemeTile(BuildContext context, WidgetRef ref, ThemeMode currentMode) {
+  Widget _buildThemeTile(
+    BuildContext context,
+    WidgetRef ref,
+    ThemeMode currentMode,
+  ) {
     return ListTile(
       leading: Icon(_getThemeIcon(currentMode)),
       title: const Text('Theme'),
@@ -129,7 +133,11 @@ class SettingsScreen extends ConsumerWidget {
     }
   }
 
-  void _showThemeDialog(BuildContext context, WidgetRef ref, ThemeMode currentMode) {
+  void _showThemeDialog(
+    BuildContext context,
+    WidgetRef ref,
+    ThemeMode currentMode,
+  ) {
     showDialog(
       context: context,
       builder: (context) => SimpleDialog(
@@ -160,7 +168,10 @@ class SettingsScreen extends ConsumerWidget {
                 ),
                 const Spacer(),
                 if (mode == currentMode)
-                  Icon(Icons.check, color: Theme.of(context).colorScheme.primary),
+                  Icon(
+                    Icons.check,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
               ],
             ),
           );
@@ -174,7 +185,9 @@ class SettingsScreen extends ConsumerWidget {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Reset App'),
-        content: const Text('This will clear all local data and log you out. Are you sure?'),
+        content: const Text(
+          'This will clear all local data and log you out. Are you sure?',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),

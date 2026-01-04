@@ -69,13 +69,17 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
       if (widget.isEditing) {
         final response = await dio.get('/products/${widget.productId}');
         if (response.statusCode == 200) {
-          final product = Product.fromJson(response.data as Map<String, dynamic>);
+          final product = Product.fromJson(
+            response.data as Map<String, dynamic>,
+          );
           _titleController.text = product.title;
           _contentController.text = product.content ?? '';
           _priceController.text = product.price?.toString() ?? '';
-          _purchasePriceController.text = product.purchasePrice?.toString() ?? '';
+          _purchasePriceController.text =
+              product.purchasePrice?.toString() ?? '';
           _auctionPriceController.text = product.auctionPrice?.toString() ?? '';
-          _directPriceController.text = product.directSalePrice?.toString() ?? '';
+          _directPriceController.text =
+              product.directSalePrice?.toString() ?? '';
           _categoryId = product.categoryId;
         }
       }
@@ -169,10 +173,7 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
               ),
             )
           else
-            IconButton(
-              icon: const Icon(Icons.save),
-              onPressed: _save,
-            ),
+            IconButton(icon: const Icon(Icons.save), onPressed: _save),
         ],
       ),
       body: _buildBody(),
@@ -231,10 +232,9 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
                   border: OutlineInputBorder(),
                 ),
                 items: _categories
-                    .map((c) => DropdownMenuItem(
-                          value: c.id,
-                          child: Text(c.name),
-                        ))
+                    .map(
+                      (c) => DropdownMenuItem(value: c.id, child: Text(c.name)),
+                    )
                     .toList(),
                 onChanged: (value) {
                   setState(() {
@@ -259,9 +259,9 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
             // Prices section
             Text(
               'Pricing',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
 
@@ -273,7 +273,9 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
                 border: OutlineInputBorder(),
                 prefixText: '\$ ',
               ),
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
             ),
             const SizedBox(height: 16),
 
@@ -286,7 +288,9 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
                 prefixText: '\$ ',
                 helperText: 'What you paid for this item',
               ),
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
             ),
             const SizedBox(height: 16),
 
@@ -298,7 +302,9 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
                 border: OutlineInputBorder(),
                 prefixText: '\$ ',
               ),
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
             ),
             const SizedBox(height: 16),
 
@@ -310,7 +316,9 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
                 border: OutlineInputBorder(),
                 prefixText: '\$ ',
               ),
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
             ),
             const SizedBox(height: 32),
 
@@ -318,7 +326,9 @@ class _ProductFormScreenState extends ConsumerState<ProductFormScreen> {
             FilledButton.icon(
               onPressed: _isSaving ? null : _save,
               icon: const Icon(Icons.save),
-              label: Text(widget.isEditing ? 'Update Product' : 'Create Product'),
+              label: Text(
+                widget.isEditing ? 'Update Product' : 'Create Product',
+              ),
             ),
           ],
         ),

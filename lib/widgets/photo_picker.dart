@@ -104,10 +104,7 @@ class PhotoPicker extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'Photos',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
+            Text('Photos', style: Theme.of(context).textTheme.titleMedium),
             Text(
               '${photos.length}/${AppConfig.maxPhotoCount}',
               style: Theme.of(context).textTheme.bodySmall,
@@ -182,10 +179,7 @@ class _PhotoTile extends StatelessWidget {
   final String photoPath;
   final VoidCallback onRemove;
 
-  const _PhotoTile({
-    required this.photoPath,
-    required this.onRemove,
-  });
+  const _PhotoTile({required this.photoPath, required this.onRemove});
 
   bool get isLocalFile =>
       photoPath.startsWith('/') || photoPath.startsWith('file://');
@@ -199,11 +193,7 @@ class _PhotoTile extends StatelessWidget {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(12),
-          child: SizedBox(
-            width: 120,
-            height: 120,
-            child: _buildImage(),
-          ),
+          child: SizedBox(width: 120, height: 120, child: _buildImage()),
         ),
         Positioned(
           top: 4,
@@ -216,11 +206,7 @@ class _PhotoTile extends StatelessWidget {
                 color: Colors.black54,
                 shape: BoxShape.circle,
               ),
-              child: const Icon(
-                Icons.close,
-                size: 16,
-                color: Colors.white,
-              ),
+              child: const Icon(Icons.close, size: 16, color: Colors.white),
             ),
           ),
         ),

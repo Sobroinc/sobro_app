@@ -13,7 +13,8 @@ class ProductDetailScreen extends ConsumerStatefulWidget {
   const ProductDetailScreen({super.key, required this.productId});
 
   @override
-  ConsumerState<ProductDetailScreen> createState() => _ProductDetailScreenState();
+  ConsumerState<ProductDetailScreen> createState() =>
+      _ProductDetailScreenState();
 }
 
 class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
@@ -53,7 +54,8 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
             Text(error.toString()),
             const SizedBox(height: 16),
             FilledButton(
-              onPressed: () => ref.invalidate(productDetailProvider(widget.productId)),
+              onPressed: () =>
+                  ref.invalidate(productDetailProvider(widget.productId)),
               child: const Text('Retry'),
             ),
           ],
@@ -64,7 +66,6 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
   }
 
   Widget _buildContent(Product product) {
-
     return CustomScrollView(
       slivers: [
         // Image gallery with app bar
@@ -95,7 +96,10 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
                 // Category
                 if (product.categoryName != null)
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.primaryContainer,
                       borderRadius: BorderRadius.circular(16),
@@ -254,10 +258,22 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
       prices.add(_buildPriceRow('Price', product.price!, 'USD'));
     }
     if (product.directSalePrice != null) {
-      prices.add(_buildPriceRow('Direct Sale', product.directSalePrice!, product.directCurrency));
+      prices.add(
+        _buildPriceRow(
+          'Direct Sale',
+          product.directSalePrice!,
+          product.directCurrency,
+        ),
+      );
     }
     if (product.auctionPrice != null) {
-      prices.add(_buildPriceRow('Auction Start', product.auctionPrice!, product.auctionCurrency));
+      prices.add(
+        _buildPriceRow(
+          'Auction Start',
+          product.auctionPrice!,
+          product.auctionCurrency,
+        ),
+      );
     }
 
     if (prices.isEmpty) {
@@ -302,20 +318,28 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
   Widget _buildSpecifications(ProductParams params) {
     final specs = <MapEntry<String, String>>[];
 
-    if (params.manufacturer != null) specs.add(MapEntry('Manufacturer', params.manufacturer!));
+    if (params.manufacturer != null)
+      specs.add(MapEntry('Manufacturer', params.manufacturer!));
     if (params.model != null) specs.add(MapEntry('Model', params.model!));
-    if (params.machineType != null) specs.add(MapEntry('Type', params.machineType!));
-    if (params.yearOfProduction != null) specs.add(MapEntry('Year', params.yearOfProduction!));
-    if (params.serialNumber != null) specs.add(MapEntry('Serial #', params.serialNumber!));
+    if (params.machineType != null)
+      specs.add(MapEntry('Type', params.machineType!));
+    if (params.yearOfProduction != null)
+      specs.add(MapEntry('Year', params.yearOfProduction!));
+    if (params.serialNumber != null)
+      specs.add(MapEntry('Serial #', params.serialNumber!));
     if (params.weight != null) specs.add(MapEntry('Weight', params.weight!));
-    if (params.location != null) specs.add(MapEntry('Location', params.location!));
-    if (params.itemStatus != null) specs.add(MapEntry('Condition', params.itemStatus!));
+    if (params.location != null)
+      specs.add(MapEntry('Location', params.location!));
+    if (params.itemStatus != null)
+      specs.add(MapEntry('Condition', params.itemStatus!));
 
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
-          children: specs.map((spec) => _buildSpecRow(spec.key, spec.value)).toList(),
+          children: specs
+              .map((spec) => _buildSpecRow(spec.key, spec.value))
+              .toList(),
         ),
       ),
     );
@@ -339,9 +363,9 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
           Expanded(
             child: Text(
               value,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w500,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w500),
             ),
           ),
         ],
@@ -380,15 +404,16 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
       ),
       child: Text(
         label,
-        style: TextStyle(
-          color: color,
-          fontWeight: FontWeight.bold,
-        ),
+        style: TextStyle(color: color, fontWeight: FontWeight.bold),
       ),
     );
   }
 
-  void _openFullScreenGallery(BuildContext context, Product product, int initialIndex) {
+  void _openFullScreenGallery(
+    BuildContext context,
+    Product product,
+    int initialIndex,
+  ) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => _FullScreenGallery(
@@ -405,10 +430,7 @@ class _FullScreenGallery extends StatefulWidget {
   final List<ProductFile> images;
   final int initialIndex;
 
-  const _FullScreenGallery({
-    required this.images,
-    required this.initialIndex,
-  });
+  const _FullScreenGallery({required this.images, required this.initialIndex});
 
   @override
   State<_FullScreenGallery> createState() => _FullScreenGalleryState();

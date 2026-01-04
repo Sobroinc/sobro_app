@@ -57,7 +57,10 @@ class OrderDetailScreen extends ConsumerWidget {
               _buildStatusChip(context, status),
               const SizedBox(width: 8),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.surfaceContainerHighest,
                   borderRadius: BorderRadius.circular(16),
@@ -82,8 +85,10 @@ class OrderDetailScreen extends ConsumerWidget {
                       children: [
                         const Icon(Icons.person),
                         const SizedBox(width: 8),
-                        Text(buyer['name'] as String? ?? 'Unknown',
-                            style: const TextStyle(fontWeight: FontWeight.bold)),
+                        Text(
+                          buyer['name'] as String? ?? 'Unknown',
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ],
                     ),
                     if (buyer['email'] != null) ...[
@@ -112,8 +117,10 @@ class OrderDetailScreen extends ConsumerWidget {
                   children: [
                     const Icon(Icons.store),
                     const SizedBox(width: 8),
-                    Text(seller['name'] as String? ?? 'Unknown',
-                        style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Text(
+                      seller['name'] as String? ?? 'Unknown',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ],
                 ),
               ),
@@ -123,7 +130,10 @@ class OrderDetailScreen extends ConsumerWidget {
 
           // Items
           if (items.isNotEmpty) ...[
-            Text('Items (${items.length})', style: Theme.of(context).textTheme.titleMedium),
+            Text(
+              'Items (${items.length})',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
             const SizedBox(height: 8),
             Card(
               child: Column(
@@ -154,14 +164,25 @@ class OrderDetailScreen extends ConsumerWidget {
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   children: [
-                    _buildRow(context, 'Subtotal',
-                        '\$${(totals['subtotal'] as num?)?.toStringAsFixed(0) ?? '0'}'),
-                    if ((totals['commission'] as num?) != null && (totals['commission'] as num) > 0)
-                      _buildRow(context, 'Commission',
-                          '\$${(totals['commission'] as num).toStringAsFixed(0)}'),
-                    if ((totals['shipping'] as num?) != null && (totals['shipping'] as num) > 0)
-                      _buildRow(context, 'Shipping',
-                          '\$${(totals['shipping'] as num).toStringAsFixed(0)}'),
+                    _buildRow(
+                      context,
+                      'Subtotal',
+                      '\$${(totals['subtotal'] as num?)?.toStringAsFixed(0) ?? '0'}',
+                    ),
+                    if ((totals['commission'] as num?) != null &&
+                        (totals['commission'] as num) > 0)
+                      _buildRow(
+                        context,
+                        'Commission',
+                        '\$${(totals['commission'] as num).toStringAsFixed(0)}',
+                      ),
+                    if ((totals['shipping'] as num?) != null &&
+                        (totals['shipping'] as num) > 0)
+                      _buildRow(
+                        context,
+                        'Shipping',
+                        '\$${(totals['shipping'] as num).toStringAsFixed(0)}',
+                      ),
                     const Divider(),
                     _buildRow(
                       context,
@@ -187,11 +208,23 @@ class OrderDetailScreen extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (shipment['carrier'] != null)
-                      _buildRow(context, 'Carrier', shipment['carrier'] as String),
+                      _buildRow(
+                        context,
+                        'Carrier',
+                        shipment['carrier'] as String,
+                      ),
                     if (shipment['tracking_number'] != null)
-                      _buildRow(context, 'Tracking #', shipment['tracking_number'] as String),
+                      _buildRow(
+                        context,
+                        'Tracking #',
+                        shipment['tracking_number'] as String,
+                      ),
                     if (shipment['ship_to_address'] != null)
-                      _buildRow(context, 'Address', shipment['ship_to_address'] as String),
+                      _buildRow(
+                        context,
+                        'Address',
+                        shipment['ship_to_address'] as String,
+                      ),
                   ],
                 ),
               ),
@@ -250,18 +283,36 @@ class OrderDetailScreen extends ConsumerWidget {
         color: color.withAlpha(30),
         borderRadius: BorderRadius.circular(16),
       ),
-      child: Text(label, style: TextStyle(color: color, fontWeight: FontWeight.bold)),
+      child: Text(
+        label,
+        style: TextStyle(color: color, fontWeight: FontWeight.bold),
+      ),
     );
   }
 
-  Widget _buildRow(BuildContext context, String label, String value, {bool bold = false}) {
+  Widget _buildRow(
+    BuildContext context,
+    String label,
+    String value, {
+    bool bold = false,
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant)),
-          Text(value, style: TextStyle(fontWeight: bold ? FontWeight.bold : FontWeight.w500)),
+          Text(
+            label,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
+          Text(
+            value,
+            style: TextStyle(
+              fontWeight: bold ? FontWeight.bold : FontWeight.w500,
+            ),
+          ),
         ],
       ),
     );

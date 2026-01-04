@@ -210,10 +210,7 @@ class _Breadcrumb extends StatelessWidget {
             tooltip: 'Back to root',
           ),
           const SizedBox(width: 8),
-          Icon(
-            Icons.folder,
-            color: Theme.of(context).colorScheme.primary,
-          ),
+          Icon(Icons.folder, color: Theme.of(context).colorScheme.primary),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
@@ -287,12 +284,16 @@ class _InventoryCard extends StatelessWidget {
                     ] else ...[
                       if (item.manufacturer != null || item.model != null)
                         Text(
-                          [item.manufacturer, item.model]
-                              .where((s) => s != null)
-                              .join(' - '),
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
-                          ),
+                          [
+                            item.manufacturer,
+                            item.model,
+                          ].where((s) => s != null).join(' - '),
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurfaceVariant,
+                              ),
                         ),
                       const SizedBox(height: 4),
                       Row(
@@ -304,7 +305,9 @@ class _InventoryCard extends StatelessWidget {
                                 vertical: 2,
                               ),
                               decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.primaryContainer,
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.primaryContainer,
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Text(
@@ -317,7 +320,9 @@ class _InventoryCard extends StatelessWidget {
                             Icon(
                               Icons.location_on,
                               size: 14,
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
+                              color: Theme.of(
+                                context,
+                              ).colorScheme.onSurfaceVariant,
                             ),
                             const SizedBox(width: 2),
                             Text(

@@ -14,7 +14,8 @@ class InventoryFormScreen extends ConsumerStatefulWidget {
   bool get isEditing => itemId != null;
 
   @override
-  ConsumerState<InventoryFormScreen> createState() => _InventoryFormScreenState();
+  ConsumerState<InventoryFormScreen> createState() =>
+      _InventoryFormScreenState();
 }
 
 class _InventoryFormScreenState extends ConsumerState<InventoryFormScreen> {
@@ -84,7 +85,8 @@ class _InventoryFormScreenState extends ConsumerState<InventoryFormScreen> {
         _modelController.text = data['model'] as String? ?? '';
         _yearController.text = data['year']?.toString() ?? '';
         _serialNumberController.text = data['serial_number'] as String? ?? '';
-        _purchasePriceController.text = data['purchase_price']?.toString() ?? '';
+        _purchasePriceController.text =
+            data['purchase_price']?.toString() ?? '';
         _salePriceController.text = data['sale_price']?.toString() ?? '';
         _quantityController.text = (data['quantity'] as int? ?? 1).toString();
         _locationController.text = data['location'] as String? ?? '';
@@ -181,7 +183,13 @@ class _InventoryFormScreenState extends ConsumerState<InventoryFormScreen> {
         if (response.statusCode == 200 || response.statusCode == 201) {
           if (mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(_isGroup ? 'Group created successfully' : 'Item created successfully')),
+              SnackBar(
+                content: Text(
+                  _isGroup
+                      ? 'Group created successfully'
+                      : 'Item created successfully',
+                ),
+              ),
             );
             ref.read(inventoryProvider.notifier).refresh();
             context.pop();
@@ -205,9 +213,11 @@ class _InventoryFormScreenState extends ConsumerState<InventoryFormScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.isEditing
-            ? 'Edit ${_isGroup ? 'Group' : 'Item'}'
-            : (_isGroup ? 'New Group' : 'New Item')),
+        title: Text(
+          widget.isEditing
+              ? 'Edit ${_isGroup ? 'Group' : 'Item'}'
+              : (_isGroup ? 'New Group' : 'New Item'),
+        ),
         actions: [
           if (_isSaving)
             const Center(
@@ -221,10 +231,7 @@ class _InventoryFormScreenState extends ConsumerState<InventoryFormScreen> {
               ),
             )
           else
-            IconButton(
-              icon: const Icon(Icons.save),
-              onPressed: _save,
-            ),
+            IconButton(icon: const Icon(Icons.save), onPressed: _save),
         ],
       ),
       body: _buildBody(),
@@ -331,9 +338,9 @@ class _InventoryFormScreenState extends ConsumerState<InventoryFormScreen> {
               // Specifications section
               Text(
                 'Specifications',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
 
@@ -398,7 +405,9 @@ class _InventoryFormScreenState extends ConsumerState<InventoryFormScreen> {
                         border: OutlineInputBorder(),
                       ),
                       items: _conditions
-                          .map((c) => DropdownMenuItem(value: c, child: Text(c)))
+                          .map(
+                            (c) => DropdownMenuItem(value: c, child: Text(c)),
+                          )
                           .toList(),
                       onChanged: (value) {
                         setState(() {
@@ -425,9 +434,9 @@ class _InventoryFormScreenState extends ConsumerState<InventoryFormScreen> {
               // Pricing section
               Text(
                 'Pricing',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
 
@@ -441,7 +450,9 @@ class _InventoryFormScreenState extends ConsumerState<InventoryFormScreen> {
                         border: OutlineInputBorder(),
                         prefixText: '\$ ',
                       ),
-                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -453,7 +464,9 @@ class _InventoryFormScreenState extends ConsumerState<InventoryFormScreen> {
                         border: OutlineInputBorder(),
                         prefixText: '\$ ',
                       ),
-                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: true,
+                      ),
                     ),
                   ),
                 ],
@@ -463,9 +476,9 @@ class _InventoryFormScreenState extends ConsumerState<InventoryFormScreen> {
               // Location section
               Text(
                 'Location',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 12),
 

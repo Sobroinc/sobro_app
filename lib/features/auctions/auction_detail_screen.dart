@@ -23,7 +23,8 @@ class AuctionDetailScreen extends ConsumerWidget {
               Text(error.toString()),
               const SizedBox(height: 16),
               FilledButton(
-                onPressed: () => ref.invalidate(auctionDetailProvider(productId)),
+                onPressed: () =>
+                    ref.invalidate(auctionDetailProvider(productId)),
                 child: const Text('Retry'),
               ),
             ],
@@ -53,9 +54,9 @@ class AuctionDetailScreen extends ConsumerWidget {
           // Title
           Text(
             title,
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           _buildStatusChip(context, status),
@@ -98,7 +99,10 @@ class AuctionDetailScreen extends ConsumerWidget {
                 padding: const EdgeInsets.all(16),
                 child: Row(
                   children: [
-                    Icon(Icons.timer, color: Theme.of(context).colorScheme.primary),
+                    Icon(
+                      Icons.timer,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Column(
@@ -107,9 +111,8 @@ class AuctionDetailScreen extends ConsumerWidget {
                           const Text('Time Remaining'),
                           Text(
                             _formatTime(timeRemaining),
-                            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: Theme.of(context).textTheme.titleLarge
+                                ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -126,9 +129,17 @@ class AuctionDetailScreen extends ConsumerWidget {
               padding: const EdgeInsets.all(16),
               child: Column(
                 children: [
-                  _buildRow(context, 'Start Price', '\$${startPrice.toStringAsFixed(0)}'),
+                  _buildRow(
+                    context,
+                    'Start Price',
+                    '\$${startPrice.toStringAsFixed(0)}',
+                  ),
                   if (reservePrice != null)
-                    _buildRow(context, 'Reserve Price', '\$${reservePrice.toStringAsFixed(0)}'),
+                    _buildRow(
+                      context,
+                      'Reserve Price',
+                      '\$${reservePrice.toStringAsFixed(0)}',
+                    ),
                   if (winnerName != null)
                     _buildRow(context, 'Leading Bidder', winnerName),
                   if (endsAtLocal != null)
@@ -177,7 +188,12 @@ class AuctionDetailScreen extends ConsumerWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant)),
+          Text(
+            label,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
           Text(value, style: const TextStyle(fontWeight: FontWeight.w500)),
         ],
       ),

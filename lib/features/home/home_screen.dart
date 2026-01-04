@@ -64,7 +64,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   children: [
                     CircleAvatar(
                       radius: 16,
-                      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                      backgroundColor: Theme.of(
+                        context,
+                      ).colorScheme.primaryContainer,
                       child: Text(
                         user.username.substring(0, 1).toUpperCase(),
                         style: TextStyle(

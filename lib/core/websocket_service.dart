@@ -64,11 +64,7 @@ class WebSocketService {
       _state = WsConnectionState.connected;
 
       // Listen for messages
-      _channel!.stream.listen(
-        _onMessage,
-        onError: _onError,
-        onDone: _onDone,
-      );
+      _channel!.stream.listen(_onMessage, onError: _onError, onDone: _onDone);
 
       // Start ping timer (keepalive)
       _startPingTimer();

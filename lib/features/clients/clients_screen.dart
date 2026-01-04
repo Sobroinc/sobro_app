@@ -44,9 +44,9 @@ class _ClientsTabState extends ConsumerState<ClientsTab> {
   }
 
   void _onSearch() {
-    ref.read(clientsProvider.notifier).setFilter(
-      search: _searchController.text,
-    );
+    ref
+        .read(clientsProvider.notifier)
+        .setFilter(search: _searchController.text);
   }
 
   void _onSearchChanged(String query) {
@@ -225,9 +225,10 @@ class _ClientCard extends StatelessWidget {
                       ),
                     if (client.phone != null || client.email != null)
                       Text(
-                        [client.phone, client.email]
-                            .where((s) => s != null)
-                            .join(' | '),
+                        [
+                          client.phone,
+                          client.email,
+                        ].where((s) => s != null).join(' | '),
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
@@ -241,13 +242,16 @@ class _ClientCard extends StatelessWidget {
                           Icon(
                             Icons.location_on,
                             size: 14,
-                            color: Theme.of(context).colorScheme.onSurfaceVariant,
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurfaceVariant,
                           ),
                           const SizedBox(width: 4),
                           Text(
-                            [client.city, client.country]
-                                .where((s) => s != null)
-                                .join(', '),
+                            [
+                              client.city,
+                              client.country,
+                            ].where((s) => s != null).join(', '),
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
                         ],

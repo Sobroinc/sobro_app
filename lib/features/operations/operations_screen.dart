@@ -66,7 +66,9 @@ class _OperationsTabState extends ConsumerState<OperationsTab> {
                 selected: _selectedStatus == 'pending_payment',
                 onSelected: () {
                   setState(() => _selectedStatus = 'pending_payment');
-                  ref.read(operationsProvider.notifier).setFilter('pending_payment');
+                  ref
+                      .read(operationsProvider.notifier)
+                      .setFilter('pending_payment');
                 },
               ),
               const SizedBox(width: 8),
@@ -138,10 +140,7 @@ class _OperationsTabState extends ConsumerState<OperationsTab> {
               color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
             const SizedBox(height: 16),
-            Text(
-              'No orders',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
+            Text('No orders', style: Theme.of(context).textTheme.titleMedium),
           ],
         ),
       );
@@ -240,7 +239,9 @@ class _OrderCard extends StatelessWidget {
                       vertical: 4,
                     ),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.surfaceContainerHighest,
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(

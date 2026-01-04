@@ -27,14 +27,20 @@ class ProductParams {
 
   factory ProductParams.fromJson(Map<String, dynamic> json) {
     return ProductParams(
-      machineType: json['machine_type'] as String? ?? json['Machine type'] as String?,
-      manufacturer: json['manufacturer'] as String? ?? json['Manufacturer'] as String?,
+      machineType:
+          json['machine_type'] as String? ?? json['Machine type'] as String?,
+      manufacturer:
+          json['manufacturer'] as String? ?? json['Manufacturer'] as String?,
       model: json['model'] as String? ?? json['Model'] as String?,
-      yearOfProduction: json['year_of_production'] as String? ?? json['Year of production'] as String?,
-      serialNumber: json['serial_number'] as String? ?? json['Serial number'] as String?,
+      yearOfProduction:
+          json['year_of_production'] as String? ??
+          json['Year of production'] as String?,
+      serialNumber:
+          json['serial_number'] as String? ?? json['Serial number'] as String?,
       weight: json['weight'] as String? ?? json['Weight'] as String?,
       location: json['location'] as String? ?? json['Location'] as String?,
-      itemStatus: json['item_status'] as String? ?? json['Item status'] as String?,
+      itemStatus:
+          json['item_status'] as String? ?? json['Item status'] as String?,
     );
   }
 
@@ -119,7 +125,8 @@ class Product {
   }
 
   /// All image files.
-  List<ProductFile> get images => files.where((f) => f.type == 'image').toList();
+  List<ProductFile> get images =>
+      files.where((f) => f.type == 'image').toList();
 }
 
 /// Product file (image/document).
@@ -266,10 +273,9 @@ class ProductsNotifier extends Notifier<ProductsState> {
 
   void _handleProductUpdated(Map<String, dynamic> data) {
     final updated = Product.fromJson(data);
-    final products =
-        state.products.map((p) {
-          return p.id == updated.id ? updated : p;
-        }).toList();
+    final products = state.products.map((p) {
+      return p.id == updated.id ? updated : p;
+    }).toList();
     state = state.copyWith(products: products);
   }
 
@@ -282,7 +288,11 @@ class ProductsNotifier extends Notifier<ProductsState> {
   }
 
   /// Load products from API.
-  Future<void> loadProducts({bool refresh = false, String? search, int? categoryId}) async {
+  Future<void> loadProducts({
+    bool refresh = false,
+    String? search,
+    int? categoryId,
+  }) async {
     if (state.isLoading) return;
 
     final page = refresh ? 1 : state.page;
@@ -309,10 +319,9 @@ class ProductsNotifier extends Notifier<ProductsState> {
 
       if (response.statusCode == 200) {
         final data = response.data;
-        final products =
-            (data['products'] as List)
-                .map((p) => Product.fromJson(p as Map<String, dynamic>))
-                .toList();
+        final products = (data['products'] as List)
+            .map((p) => Product.fromJson(p as Map<String, dynamic>))
+            .toList();
         final total = data['total'] as int? ?? 0;
 
         state = state.copyWith(
@@ -355,7 +364,10 @@ final productsProvider = NotifierProvider<ProductsNotifier, ProductsState>(() {
 
 /// Product detail provider using FutureProvider.
 /// Per Riverpod 3.x docs: https://riverpod.dev/docs/concepts/providers
-final productDetailProvider = FutureProvider.family<Product, int>((ref, productId) async {
+final productDetailProvider = FutureProvider.family<Product, int>((
+  ref,
+  productId,
+) async {
   final dio = ref.read(dioProvider);
   final response = await dio.get('/products/$productId');
 

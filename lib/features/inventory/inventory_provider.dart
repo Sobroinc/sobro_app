@@ -110,7 +110,9 @@ class InventoryState {
       error: error,
       page: page ?? this.page,
       hasMore: hasMore ?? this.hasMore,
-      currentGroupId: clearGroup ? null : (currentGroupId ?? this.currentGroupId),
+      currentGroupId: clearGroup
+          ? null
+          : (currentGroupId ?? this.currentGroupId),
       currentGroup: clearGroup ? null : (currentGroup ?? this.currentGroup),
       searchQuery: clearSearch ? null : (searchQuery ?? this.searchQuery),
     );
@@ -144,14 +146,14 @@ class InventoryNotifier extends Notifier<InventoryState> {
 
       if (groupId != null) {
         // Load group items
-        final queryParams = <String, dynamic>{
-          'page': 1,
-          'per_page': 20,
-        };
+        final queryParams = <String, dynamic>{'page': 1, 'per_page': 20};
         if (search != null && search.isNotEmpty) {
           queryParams['search'] = search;
         }
-        final response = await dio.get('/inventory/group/$groupId', queryParameters: queryParams);
+        final response = await dio.get(
+          '/inventory/group/$groupId',
+          queryParameters: queryParams,
+        );
         if (response.statusCode == 200) {
           final data = response.data as Map<String, dynamic>;
           final items = (data['items'] as List)
@@ -171,14 +173,14 @@ class InventoryNotifier extends Notifier<InventoryState> {
         }
       } else {
         // Load root items
-        final queryParams = <String, dynamic>{
-          'page': 1,
-          'per_page': 20,
-        };
+        final queryParams = <String, dynamic>{'page': 1, 'per_page': 20};
         if (search != null && search.isNotEmpty) {
           queryParams['search'] = search;
         }
-        final response = await dio.get('/inventory', queryParameters: queryParams);
+        final response = await dio.get(
+          '/inventory',
+          queryParameters: queryParams,
+        );
 
         if (response.statusCode == 200) {
           final data = response.data as Map<String, dynamic>;
@@ -195,10 +197,7 @@ class InventoryNotifier extends Notifier<InventoryState> {
         }
       }
     } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      );
+      state = state.copyWith(isLoading: false, error: e.toString());
     }
   }
 
@@ -214,10 +213,7 @@ class InventoryNotifier extends Notifier<InventoryState> {
           ? '/inventory/group/${state.currentGroupId}'
           : '/inventory';
 
-      final queryParams = <String, dynamic>{
-        'page': nextPage,
-        'per_page': 20,
-      };
+      final queryParams = <String, dynamic>{'page': nextPage, 'per_page': 20};
       if (state.searchQuery != null && state.searchQuery!.isNotEmpty) {
         queryParams['search'] = state.searchQuery;
       }
@@ -261,12 +257,17 @@ class InventoryNotifier extends Notifier<InventoryState> {
 }
 
 /// Inventory provider.
-final inventoryProvider = NotifierProvider<InventoryNotifier, InventoryState>(() {
-  return InventoryNotifier();
-});
+final inventoryProvider = NotifierProvider<InventoryNotifier, InventoryState>(
+  () {
+    return InventoryNotifier();
+  },
+);
 
 /// Inventory item detail provider.
-final inventoryDetailProvider = FutureProvider.family<InventoryItem, int>((ref, itemId) async {
+final inventoryDetailProvider = FutureProvider.family<InventoryItem, int>((
+  ref,
+  itemId,
+) async {
   final dio = ref.read(dioProvider);
   final response = await dio.get('/inventory/$itemId');
   if (response.statusCode == 200) {

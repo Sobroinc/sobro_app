@@ -68,7 +68,8 @@ class Client {
   }
 
   bool get isCompany => type == 'company';
-  String get displayName => clientNumber != null ? '#$clientNumber $name' : name;
+  String get displayName =>
+      clientNumber != null ? '#$clientNumber $name' : name;
 }
 
 /// Clients state.
@@ -134,10 +135,7 @@ class ClientsNotifier extends Notifier<ClientsState> {
 
     try {
       final dio = ref.read(dioProvider);
-      final params = <String, dynamic>{
-        'page': 1,
-        'per_page': 20,
-      };
+      final params = <String, dynamic>{'page': 1, 'per_page': 20};
       if (search != null && search.isNotEmpty) params['search'] = search;
       if (type != null) params['type'] = type;
 
@@ -157,10 +155,7 @@ class ClientsNotifier extends Notifier<ClientsState> {
         );
       }
     } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      );
+      state = state.copyWith(isLoading: false, error: e.toString());
     }
   }
 
@@ -172,10 +167,7 @@ class ClientsNotifier extends Notifier<ClientsState> {
 
     try {
       final dio = ref.read(dioProvider);
-      final params = <String, dynamic>{
-        'page': nextPage,
-        'per_page': 20,
-      };
+      final params = <String, dynamic>{'page': nextPage, 'per_page': 20};
       if (state.searchQuery != null && state.searchQuery!.isNotEmpty) {
         params['search'] = state.searchQuery;
       }
@@ -217,7 +209,10 @@ final clientsProvider = NotifierProvider<ClientsNotifier, ClientsState>(() {
 });
 
 /// Client detail provider.
-final clientDetailProvider = FutureProvider.family<Client, int>((ref, clientId) async {
+final clientDetailProvider = FutureProvider.family<Client, int>((
+  ref,
+  clientId,
+) async {
   final dio = ref.read(dioProvider);
   final response = await dio.get('/clients/$clientId');
   if (response.statusCode == 200) {

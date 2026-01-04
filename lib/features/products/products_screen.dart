@@ -116,7 +116,9 @@ class _ProductsTabState extends ConsumerState<ProductsTab> {
                       label: const Text('All'),
                       selected: state.categoryId == null,
                       onSelected: (_) {
-                        ref.read(productsProvider.notifier).filterByCategory(null);
+                        ref
+                            .read(productsProvider.notifier)
+                            .filterByCategory(null);
                       },
                     ),
                   );
@@ -128,7 +130,9 @@ class _ProductsTabState extends ConsumerState<ProductsTab> {
                     label: Text('${category.name} (${category.count})'),
                     selected: state.categoryId == category.id,
                     onSelected: (_) {
-                      ref.read(productsProvider.notifier).filterByCategory(category.id);
+                      ref
+                          .read(productsProvider.notifier)
+                          .filterByCategory(category.id);
                     },
                   ),
                 );
@@ -226,11 +230,7 @@ class _ProductCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Image
-            SizedBox(
-              width: 100,
-              height: 100,
-              child: _buildImage(),
-            ),
+            SizedBox(width: 100, height: 100, child: _buildImage()),
             // Content
             Expanded(
               child: Padding(
@@ -324,24 +324,21 @@ class _ProductCard extends StatelessWidget {
     }
 
     // Build full URL
-    final imageUrl =
-        product.imageUrl!.startsWith('http')
-            ? product.imageUrl!
-            : '${AppConfig.baseUrl.replaceAll('/api', '')}${product.imageUrl}';
+    final imageUrl = product.imageUrl!.startsWith('http')
+        ? product.imageUrl!
+        : '${AppConfig.baseUrl.replaceAll('/api', '')}${product.imageUrl}';
 
     return CachedNetworkImage(
       imageUrl: imageUrl,
       fit: BoxFit.cover,
-      placeholder:
-          (context, url) => Container(
-            color: Colors.grey.shade200,
-            child: const Center(child: CircularProgressIndicator(strokeWidth: 2)),
-          ),
-      errorWidget:
-          (context, url, error) => Container(
-            color: Colors.grey.shade200,
-            child: const Icon(Icons.broken_image, color: Colors.grey),
-          ),
+      placeholder: (context, url) => Container(
+        color: Colors.grey.shade200,
+        child: const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+      ),
+      errorWidget: (context, url, error) => Container(
+        color: Colors.grey.shade200,
+        child: const Icon(Icons.broken_image, color: Colors.grey),
+      ),
     );
   }
 }

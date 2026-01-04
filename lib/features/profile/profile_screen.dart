@@ -56,9 +56,9 @@ class ProfileScreen extends ConsumerWidget {
           // Name
           Text(
             user.fullName ?? user.username,
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(
+              context,
+            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 4),
           Text(
@@ -88,55 +88,52 @@ class ProfileScreen extends ConsumerWidget {
           const SizedBox(height: 32),
 
           // Info cards
-          _buildInfoCard(
-            context,
-            'Account Information',
-            [
-              _buildInfoRow(context, Icons.email_outlined, 'Email', user.email ?? 'Not set'),
-              _buildInfoRow(context, Icons.badge_outlined, 'Role', user.role),
-              _buildInfoRow(
-                context,
-                Icons.check_circle_outline,
-                'Status',
-                user.isActive ? 'Active' : 'Inactive',
-              ),
-              _buildInfoRow(
-                context,
-                Icons.calendar_today_outlined,
-                'Member since',
-                dateFormat.format(user.createdAt),
-              ),
-            ],
-          ),
+          _buildInfoCard(context, 'Account Information', [
+            _buildInfoRow(
+              context,
+              Icons.email_outlined,
+              'Email',
+              user.email ?? 'Not set',
+            ),
+            _buildInfoRow(context, Icons.badge_outlined, 'Role', user.role),
+            _buildInfoRow(
+              context,
+              Icons.check_circle_outline,
+              'Status',
+              user.isActive ? 'Active' : 'Inactive',
+            ),
+            _buildInfoRow(
+              context,
+              Icons.calendar_today_outlined,
+              'Member since',
+              dateFormat.format(user.createdAt),
+            ),
+          ]),
           const SizedBox(height: 16),
 
           // Actions
-          _buildInfoCard(
-            context,
-            'Actions',
-            [
-              ListTile(
-                leading: const Icon(Icons.password_outlined),
-                title: const Text('Change Password'),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Password change coming soon')),
-                  );
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.edit_outlined),
-                title: const Text('Edit Profile'),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Profile editing coming soon')),
-                  );
-                },
-              ),
-            ],
-          ),
+          _buildInfoCard(context, 'Actions', [
+            ListTile(
+              leading: const Icon(Icons.password_outlined),
+              title: const Text('Change Password'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Password change coming soon')),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.edit_outlined),
+              title: const Text('Edit Profile'),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Profile editing coming soon')),
+                );
+              },
+            ),
+          ]),
           const SizedBox(height: 32),
 
           // Logout button
@@ -172,7 +169,11 @@ class ProfileScreen extends ConsumerWidget {
     }
   }
 
-  Widget _buildInfoCard(BuildContext context, String title, List<Widget> children) {
+  Widget _buildInfoCard(
+    BuildContext context,
+    String title,
+    List<Widget> children,
+  ) {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -181,9 +182,9 @@ class ProfileScreen extends ConsumerWidget {
           children: [
             Text(
               title,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
             ...children,
@@ -193,14 +194,28 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildInfoRow(BuildContext context, IconData icon, String label, String value) {
+  Widget _buildInfoRow(
+    BuildContext context,
+    IconData icon,
+    String label,
+    String value,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
-          Icon(icon, size: 20, color: Theme.of(context).colorScheme.onSurfaceVariant),
+          Icon(
+            icon,
+            size: 20,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
           const SizedBox(width: 12),
-          Text(label, style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant)),
+          Text(
+            label,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
           const Spacer(),
           Text(value, style: const TextStyle(fontWeight: FontWeight.w500)),
         ],

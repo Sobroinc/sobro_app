@@ -75,14 +75,14 @@ class ClientDetailScreen extends ConsumerWidget {
                   children: [
                     Text(
                       client.displayName,
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 4),
                     Row(
                       children: [
-                        if (client.isSeller) _buildBadge(context, 'Seller', Colors.orange),
+                        if (client.isSeller)
+                          _buildBadge(context, 'Seller', Colors.orange),
                         if (client.isBuyer) ...[
                           const SizedBox(width: 8),
                           _buildBadge(context, 'Buyer', Colors.blue),
@@ -99,7 +99,12 @@ class ClientDetailScreen extends ConsumerWidget {
           // Contact info
           _buildSection(context, 'Contact Information', [
             if (client.contactPerson != null)
-              _buildRow(context, Icons.person_outline, 'Contact', client.contactPerson!),
+              _buildRow(
+                context,
+                Icons.person_outline,
+                'Contact',
+                client.contactPerson!,
+              ),
             if (client.phone != null)
               _buildRow(context, Icons.phone_outlined, 'Phone', client.phone!),
             if (client.email != null)
@@ -107,26 +112,54 @@ class ClientDetailScreen extends ConsumerWidget {
           ]),
 
           // Address
-          if (client.address != null || client.city != null || client.country != null)
+          if (client.address != null ||
+              client.city != null ||
+              client.country != null)
             _buildSection(context, 'Address', [
               if (client.address != null)
-                _buildRow(context, Icons.location_on_outlined, 'Address', client.address!),
+                _buildRow(
+                  context,
+                  Icons.location_on_outlined,
+                  'Address',
+                  client.address!,
+                ),
               if (client.city != null)
                 _buildRow(context, Icons.location_city, 'City', client.city!),
               if (client.country != null)
-                _buildRow(context, Icons.flag_outlined, 'Country', client.country!),
+                _buildRow(
+                  context,
+                  Icons.flag_outlined,
+                  'Country',
+                  client.country!,
+                ),
             ]),
 
           // Statistics
           _buildSection(context, 'Statistics', [
-            _buildRow(context, Icons.sell_outlined, 'Items on Consignment',
-                client.itemsOnConsignment.toString()),
-            _buildRow(context, Icons.shopping_cart_outlined, 'Items Purchased',
-                client.itemsPurchased.toString()),
-            _buildRow(context, Icons.attach_money, 'Total Sales',
-                '\$${client.totalSales.toStringAsFixed(0)}'),
-            _buildRow(context, Icons.payments_outlined, 'Total Purchases',
-                '\$${client.totalPurchases.toStringAsFixed(0)}'),
+            _buildRow(
+              context,
+              Icons.sell_outlined,
+              'Items on Consignment',
+              client.itemsOnConsignment.toString(),
+            ),
+            _buildRow(
+              context,
+              Icons.shopping_cart_outlined,
+              'Items Purchased',
+              client.itemsPurchased.toString(),
+            ),
+            _buildRow(
+              context,
+              Icons.attach_money,
+              'Total Sales',
+              '\$${client.totalSales.toStringAsFixed(0)}',
+            ),
+            _buildRow(
+              context,
+              Icons.payments_outlined,
+              'Total Purchases',
+              '\$${client.totalPurchases.toStringAsFixed(0)}',
+            ),
           ]),
 
           // Notes
@@ -162,18 +195,29 @@ class ClientDetailScreen extends ConsumerWidget {
       ),
       child: Text(
         label,
-        style: TextStyle(color: color, fontWeight: FontWeight.bold, fontSize: 12),
+        style: TextStyle(
+          color: color,
+          fontWeight: FontWeight.bold,
+          fontSize: 12,
+        ),
       ),
     );
   }
 
-  Widget _buildSection(BuildContext context, String title, List<Widget> children) {
+  Widget _buildSection(
+    BuildContext context,
+    String title,
+    List<Widget> children,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: Theme.of(context).textTheme.titleMedium?.copyWith(
-          fontWeight: FontWeight.bold,
-        )),
+        Text(
+          title,
+          style: Theme.of(
+            context,
+          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+        ),
         const SizedBox(height: 8),
         Card(
           child: Padding(
@@ -189,14 +233,28 @@ class ClientDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildRow(BuildContext context, IconData icon, String label, String value) {
+  Widget _buildRow(
+    BuildContext context,
+    IconData icon,
+    String label,
+    String value,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         children: [
-          Icon(icon, size: 20, color: Theme.of(context).colorScheme.onSurfaceVariant),
+          Icon(
+            icon,
+            size: 20,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
           const SizedBox(width: 12),
-          Text(label, style: TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant)),
+          Text(
+            label,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+          ),
           const Spacer(),
           Text(value, style: const TextStyle(fontWeight: FontWeight.w500)),
         ],

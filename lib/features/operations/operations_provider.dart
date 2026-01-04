@@ -122,10 +122,7 @@ class OperationsNotifier extends Notifier<OperationsState> {
 
     try {
       final dio = ref.read(dioProvider);
-      final params = <String, dynamic>{
-        'page': 1,
-        'per_page': 20,
-      };
+      final params = <String, dynamic>{'page': 1, 'per_page': 20};
       if (status != null) params['status'] = status;
 
       final response = await dio.get('/orders', queryParameters: params);
@@ -144,10 +141,7 @@ class OperationsNotifier extends Notifier<OperationsState> {
         );
       }
     } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      );
+      state = state.copyWith(isLoading: false, error: e.toString());
     }
   }
 
@@ -159,10 +153,7 @@ class OperationsNotifier extends Notifier<OperationsState> {
 
     try {
       final dio = ref.read(dioProvider);
-      final params = <String, dynamic>{
-        'page': nextPage,
-        'per_page': 20,
-      };
+      final params = <String, dynamic>{'page': nextPage, 'per_page': 20};
       if (state.statusFilter != null) params['status'] = state.statusFilter;
 
       final response = await dio.get('/orders', queryParameters: params);
@@ -196,12 +187,16 @@ class OperationsNotifier extends Notifier<OperationsState> {
 }
 
 /// Operations provider.
-final operationsProvider = NotifierProvider<OperationsNotifier, OperationsState>(() {
-  return OperationsNotifier();
-});
+final operationsProvider =
+    NotifierProvider<OperationsNotifier, OperationsState>(() {
+      return OperationsNotifier();
+    });
 
 /// Order detail provider.
-final orderDetailProvider = FutureProvider.family<Map<String, dynamic>, int>((ref, orderId) async {
+final orderDetailProvider = FutureProvider.family<Map<String, dynamic>, int>((
+  ref,
+  orderId,
+) async {
   final dio = ref.read(dioProvider);
   final response = await dio.get('/orders/$orderId');
   if (response.statusCode == 200) {

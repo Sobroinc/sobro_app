@@ -103,19 +103,14 @@ class AuctionsNotifier extends Notifier<AuctionsState> {
   Future<void> loadAuctions() async {
     if (state.isLoading) return;
 
-    state = state.copyWith(
-      isLoading: true,
-      error: null,
-      auctions: [],
-      page: 1,
-    );
+    state = state.copyWith(isLoading: true, error: null, auctions: [], page: 1);
 
     try {
       final dio = ref.read(dioProvider);
-      final response = await dio.get('/auctions/live', queryParameters: {
-        'page': 1,
-        'per_page': 20,
-      });
+      final response = await dio.get(
+        '/auctions/live',
+        queryParameters: {'page': 1, 'per_page': 20},
+      );
 
       if (response.statusCode == 200) {
         final data = response.data as Map<String, dynamic>;
@@ -131,10 +126,7 @@ class AuctionsNotifier extends Notifier<AuctionsState> {
         );
       }
     } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: e.toString(),
-      );
+      state = state.copyWith(isLoading: false, error: e.toString());
     }
   }
 
@@ -146,10 +138,10 @@ class AuctionsNotifier extends Notifier<AuctionsState> {
 
     try {
       final dio = ref.read(dioProvider);
-      final response = await dio.get('/auctions/live', queryParameters: {
-        'page': nextPage,
-        'per_page': 20,
-      });
+      final response = await dio.get(
+        '/auctions/live',
+        queryParameters: {'page': nextPage, 'per_page': 20},
+      );
 
       if (response.statusCode == 200) {
         final data = response.data as Map<String, dynamic>;
@@ -181,7 +173,10 @@ final auctionsProvider = NotifierProvider<AuctionsNotifier, AuctionsState>(() {
 });
 
 /// Auction detail provider.
-final auctionDetailProvider = FutureProvider.family<Map<String, dynamic>, int>((ref, productId) async {
+final auctionDetailProvider = FutureProvider.family<Map<String, dynamic>, int>((
+  ref,
+  productId,
+) async {
   final dio = ref.read(dioProvider);
   final response = await dio.get('/auctions/$productId');
   if (response.statusCode == 200) {

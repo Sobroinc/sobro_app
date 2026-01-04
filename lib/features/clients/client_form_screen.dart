@@ -181,10 +181,7 @@ class _ClientFormScreenState extends ConsumerState<ClientFormScreen> {
               ),
             )
           else
-            IconButton(
-              icon: const Icon(Icons.save),
-              onPressed: _save,
-            ),
+            IconButton(icon: const Icon(Icons.save), onPressed: _save),
         ],
       ),
       body: _buildBody(),
@@ -260,9 +257,13 @@ class _ClientFormScreenState extends ConsumerState<ClientFormScreen> {
             TextFormField(
               controller: _nameController,
               decoration: InputDecoration(
-                labelText: _type == 'company' ? 'Company Name *' : 'Full Name *',
+                labelText: _type == 'company'
+                    ? 'Company Name *'
+                    : 'Full Name *',
                 border: const OutlineInputBorder(),
-                prefixIcon: Icon(_type == 'company' ? Icons.business : Icons.person),
+                prefixIcon: Icon(
+                  _type == 'company' ? Icons.business : Icons.person,
+                ),
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -288,9 +289,9 @@ class _ClientFormScreenState extends ConsumerState<ClientFormScreen> {
             // Contact info section
             Text(
               'Contact Information',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
 
@@ -319,9 +320,9 @@ class _ClientFormScreenState extends ConsumerState<ClientFormScreen> {
             // Address section
             Text(
               'Address',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
 
