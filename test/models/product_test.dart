@@ -92,11 +92,7 @@ void main() {
 
   group('ProductCategory', () {
     test('fromJson parses correctly', () {
-      final json = {
-        'id': 5,
-        'name': 'Heavy Equipment',
-        'count': 42,
-      };
+      final json = {'id': 5, 'name': 'Heavy Equipment', 'count': 42};
 
       final category = ProductCategory.fromJson(json);
 
@@ -132,10 +128,7 @@ void main() {
           {'id': 1, 'name': 'img1.jpg', 'path': '/img1.jpg', 'type': 'image'},
           {'id': 2, 'name': 'doc.pdf', 'path': '/doc.pdf', 'type': 'document'},
         ],
-        'params': {
-          'manufacturer': 'Caterpillar',
-          'model': 'CAT 320',
-        },
+        'params': {'manufacturer': 'Caterpillar', 'model': 'CAT 320'},
       };
 
       final product = Product.fromJson(json);
@@ -158,10 +151,7 @@ void main() {
     });
 
     test('fromJson uses default values', () {
-      final json = {
-        'id': 1,
-        'title': 'Test Product',
-      };
+      final json = {'id': 1, 'title': 'Test Product'};
 
       final product = Product.fromJson(json);
 
@@ -178,9 +168,19 @@ void main() {
         id: 1,
         title: 'Test',
         files: [
-          ProductFile(id: 1, name: 'doc.pdf', path: '/doc.pdf', type: 'document'),
+          ProductFile(
+            id: 1,
+            name: 'doc.pdf',
+            path: '/doc.pdf',
+            type: 'document',
+          ),
           ProductFile(id: 2, name: 'img.jpg', path: '/img.jpg', type: 'image'),
-          ProductFile(id: 3, name: 'img2.jpg', path: '/img2.jpg', type: 'image'),
+          ProductFile(
+            id: 3,
+            name: 'img2.jpg',
+            path: '/img2.jpg',
+            type: 'image',
+          ),
         ],
       );
 
@@ -192,7 +192,12 @@ void main() {
         id: 1,
         title: 'Test',
         files: [
-          ProductFile(id: 1, name: 'doc.pdf', path: '/doc.pdf', type: 'document'),
+          ProductFile(
+            id: 1,
+            name: 'doc.pdf',
+            path: '/doc.pdf',
+            type: 'document',
+          ),
         ],
       );
 
@@ -204,9 +209,19 @@ void main() {
         id: 1,
         title: 'Test',
         files: [
-          ProductFile(id: 1, name: 'doc.pdf', path: '/doc.pdf', type: 'document'),
+          ProductFile(
+            id: 1,
+            name: 'doc.pdf',
+            path: '/doc.pdf',
+            type: 'document',
+          ),
           ProductFile(id: 2, name: 'img.jpg', path: '/img.jpg', type: 'image'),
-          ProductFile(id: 3, name: 'img2.jpg', path: '/img2.jpg', type: 'image'),
+          ProductFile(
+            id: 3,
+            name: 'img2.jpg',
+            path: '/img2.jpg',
+            type: 'image',
+          ),
         ],
       );
 

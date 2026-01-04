@@ -207,11 +207,7 @@ void main() {
 
     test('copyWith updates specified fields', () {
       final state = AuctionsState();
-      final updated = state.copyWith(
-        isLoading: true,
-        page: 2,
-        hasMore: false,
-      );
+      final updated = state.copyWith(isLoading: true, page: 2, hasMore: false);
 
       expect(updated.isLoading, true);
       expect(updated.page, 2);

@@ -101,13 +101,15 @@ void main() {
       final states = <AuthState>[
         AuthInitial(),
         AuthLoading(),
-        AuthAuthenticated(User(
-          id: 1,
-          username: 'test',
-          role: 'user',
-          isActive: true,
-          createdAt: DateTime.now(),
-        )),
+        AuthAuthenticated(
+          User(
+            id: 1,
+            username: 'test',
+            role: 'user',
+            isActive: true,
+            createdAt: DateTime.now(),
+          ),
+        ),
         AuthUnauthenticated(),
         AuthError('Error'),
       ];

@@ -48,10 +48,7 @@ void main() {
     });
 
     test('fromJson uses default values for missing fields', () {
-      final json = {
-        'id': 1,
-        'title': 'Test Item',
-      };
+      final json = {'id': 1, 'title': 'Test Item'};
 
       final item = InventoryItem.fromJson(json);
 
@@ -101,20 +98,13 @@ void main() {
       });
 
       test('returns null when photos is empty', () {
-        final item = InventoryItem(
-          id: 1,
-          title: 'Test',
-          photos: [],
-        );
+        final item = InventoryItem(id: 1, title: 'Test', photos: []);
 
         expect(item.firstPhoto, isNull);
       });
 
       test('returns null when photos is default empty list', () {
-        final item = InventoryItem(
-          id: 1,
-          title: 'Test',
-        );
+        final item = InventoryItem(id: 1, title: 'Test');
 
         expect(item.firstPhoto, isNull);
       });
