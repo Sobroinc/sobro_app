@@ -38,18 +38,26 @@ android {
     }
 
     // Signing configuration (per Flutter docs)
-    signingConfigs {
-        create("release") {
-            keyAlias = keystoreProperties["keyAlias"] as String
-            keyPassword = keystoreProperties["keyPassword"] as String
-            storeFile = keystoreProperties["storeFile"]?.let { file(it) }
-            storePassword = keystoreProperties["storePassword"] as String
+    // Only configure release signing if key.properties exists and has required values
+    if (keystorePropertiesFile.exists() && keystoreProperties.containsKey("keyAlias")) {
+        signingConfigs {
+            create("release") {
+                keyAlias = keystoreProperties["keyAlias"] as String
+                keyPassword = keystoreProperties["keyPassword"] as String
+                storeFile = keystoreProperties["storeFile"]?.let { file(it) }
+                storePassword = keystoreProperties["storePassword"] as String
+            }
         }
     }
 
     buildTypes {
         release {
-            signingConfig = signingConfigs.getByName("release")
+            // Use release signing if configured, otherwise use debug signing
+            signingConfig = if (keystorePropertiesFile.exists() && keystoreProperties.containsKey("keyAlias")) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
+            }
         }
     }
 }
