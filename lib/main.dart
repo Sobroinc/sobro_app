@@ -16,7 +16,8 @@ import 'features/settings/settings_screen.dart';
 /// In production, consider using --dart-define=SENTRY_DSN=xxx
 const String _sentryDsn = String.fromEnvironment(
   'SENTRY_DSN',
-  defaultValue: 'https://874f01a04c2939ea3953774ed260f7b9@o4510664959721472.ingest.us.sentry.io/4510665042493440',
+  defaultValue:
+      'https://874f01a04c2939ea3953774ed260f7b9@o4510664959721472.ingest.us.sentry.io/4510665042493440',
 );
 
 Future<void> main() async {
@@ -65,7 +66,8 @@ Future<void> main() async {
           final data = breadcrumb?.data;
           if (data != null && data.containsKey('url')) {
             final url = data['url'] as String?;
-            if (url != null && (url.contains('token') || url.contains('password'))) {
+            if (url != null &&
+                (url.contains('token') || url.contains('password'))) {
               return null; // Drop this breadcrumb
             }
           }
@@ -75,9 +77,7 @@ Future<void> main() async {
     },
     appRunner: () => runApp(
       // Wrap with Sentry for automatic error capture
-      SentryWidget(
-        child: const ProviderScope(child: SobroApp()),
-      ),
+      SentryWidget(child: const ProviderScope(child: SobroApp())),
     ),
   );
 }
