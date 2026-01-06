@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:sentry_dio/sentry_dio.dart';
 import 'config.dart';
 
 /// Dio HTTP client provider.
@@ -22,6 +23,10 @@ final dioProvider = Provider<Dio>((ref) {
 
   // Add auth interceptor
   dio.interceptors.add(AuthInterceptor(ref));
+
+  // Add Sentry for error tracking and performance monitoring
+  // Must be last initialization step per sentry_dio docs
+  dio.addSentry();
 
   return dio;
 });

@@ -46,6 +46,10 @@ dependencies:
   # Date formatting (official from pub.dev)
   intl: ^0.20.2
 
+  # Error tracking & performance monitoring
+  sentry_flutter: ^9.0.0
+  sentry_dio: ^9.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
