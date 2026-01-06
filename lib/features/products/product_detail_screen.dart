@@ -365,20 +365,26 @@ class _ProductDetailScreenState extends ConsumerState<ProductDetailScreen> {
   Widget _buildSpecifications(ProductParams params) {
     final specs = <MapEntry<String, String>>[];
 
-    if (params.manufacturer != null)
+    if (params.manufacturer != null) {
       specs.add(MapEntry('Manufacturer', params.manufacturer!));
+    }
     if (params.model != null) specs.add(MapEntry('Model', params.model!));
-    if (params.machineType != null)
+    if (params.machineType != null) {
       specs.add(MapEntry('Type', params.machineType!));
-    if (params.yearOfProduction != null)
+    }
+    if (params.yearOfProduction != null) {
       specs.add(MapEntry('Year', params.yearOfProduction!));
-    if (params.serialNumber != null)
+    }
+    if (params.serialNumber != null) {
       specs.add(MapEntry('Serial #', params.serialNumber!));
+    }
     if (params.weight != null) specs.add(MapEntry('Weight', params.weight!));
-    if (params.location != null)
+    if (params.location != null) {
       specs.add(MapEntry('Location', params.location!));
-    if (params.itemStatus != null)
+    }
+    if (params.itemStatus != null) {
       specs.add(MapEntry('Condition', params.itemStatus!));
+    }
 
     return Card(
       child: Padding(

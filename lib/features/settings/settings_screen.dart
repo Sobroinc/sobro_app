@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/config.dart';
+import '../../core/l10n/app_localizations.dart';
+import '../../core/locale_provider.dart';
 
 /// Theme mode notifier.
 class ThemeModeNotifier extends Notifier<ThemeMode> {
@@ -24,14 +26,22 @@ class SettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final themeMode = ref.watch(themeModeProvider);
+    final locale = ref.watch(localeProvider);
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(title: Text(l10n.settings)),
       body: ListView(
         children: [
+          // Language section
+          _buildSectionHeader(context, l10n.language),
+          _buildLanguageTile(context, ref, locale, l10n),
+
+          const Divider(),
+
           // Appearance section
-          _buildSectionHeader(context, 'Appearance'),
-          _buildThemeTile(context, ref, themeMode),
+          _buildSectionHeader(context, l10n.theme),
+          _buildThemeTile(context, ref, themeMode, l10n),
 
           const Divider(),
 
@@ -46,11 +56,11 @@ class SettingsScreen extends ConsumerWidget {
           const Divider(),
 
           // About section
-          _buildSectionHeader(context, 'About'),
+          _buildSectionHeader(context, l10n.about),
           ListTile(
             leading: const Icon(Icons.info_outline),
-            title: const Text('Version'),
-            subtitle: const Text('1.0.0'),
+            title: Text(l10n.version),
+            subtitle: const Text('2.0.0'),
           ),
           ListTile(
             leading: const Icon(Icons.code),
@@ -75,7 +85,7 @@ class SettingsScreen extends ConsumerWidget {
             leading: const Icon(Icons.refresh),
             title: const Text('Reset App'),
             onTap: () {
-              _showResetDialog(context, ref);
+              _showResetDialog(context, ref, l10n);
             },
           ),
         ],
@@ -96,17 +106,52 @@ class SettingsScreen extends ConsumerWidget {
     );
   }
 
+  Widget _buildLanguageTile(
+    BuildContext context,
+    WidgetRef ref,
+    Locale currentLocale,
+    AppLocalizations l10n,
+  ) {
+    return ListTile(
+      leading: const Icon(Icons.language),
+      title: Text(l10n.language),
+      subtitle: Text(_getLanguageName(currentLocale.languageCode)),
+      trailing: SegmentedButton<String>(
+        segments: const [
+          ButtonSegment(value: 'ru', label: Text('RU')),
+          ButtonSegment(value: 'en', label: Text('EN')),
+        ],
+        selected: {currentLocale.languageCode},
+        onSelectionChanged: (selected) {
+          ref.read(localeProvider.notifier).setLocale(Locale(selected.first));
+        },
+      ),
+    );
+  }
+
+  String _getLanguageName(String code) {
+    switch (code) {
+      case 'ru':
+        return 'Русский';
+      case 'en':
+        return 'English';
+      default:
+        return code;
+    }
+  }
+
   Widget _buildThemeTile(
     BuildContext context,
     WidgetRef ref,
     ThemeMode currentMode,
+    AppLocalizations l10n,
   ) {
     return ListTile(
       leading: Icon(_getThemeIcon(currentMode)),
-      title: const Text('Theme'),
-      subtitle: Text(_getThemeName(currentMode)),
+      title: Text(l10n.theme),
+      subtitle: Text(_getThemeName(currentMode, l10n)),
       onTap: () {
-        _showThemeDialog(context, ref, currentMode);
+        _showThemeDialog(context, ref, currentMode, l10n);
       },
     );
   }
@@ -122,14 +167,14 @@ class SettingsScreen extends ConsumerWidget {
     }
   }
 
-  String _getThemeName(ThemeMode mode) {
+  String _getThemeName(ThemeMode mode, AppLocalizations l10n) {
     switch (mode) {
       case ThemeMode.light:
-        return 'Light';
+        return l10n.lightMode;
       case ThemeMode.dark:
-        return 'Dark';
+        return l10n.darkMode;
       case ThemeMode.system:
-        return 'System';
+        return l10n.systemTheme;
     }
   }
 
@@ -137,11 +182,12 @@ class SettingsScreen extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
     ThemeMode currentMode,
+    AppLocalizations l10n,
   ) {
     showDialog(
       context: context,
       builder: (context) => SimpleDialog(
-        title: const Text('Choose Theme'),
+        title: Text(l10n.theme),
         children: ThemeMode.values.map((mode) {
           return SimpleDialogOption(
             onPressed: () {
@@ -158,7 +204,7 @@ class SettingsScreen extends ConsumerWidget {
                 ),
                 const SizedBox(width: 16),
                 Text(
-                  _getThemeName(mode),
+                  _getThemeName(mode, l10n),
                   style: TextStyle(
                     fontWeight: mode == currentMode ? FontWeight.bold : null,
                     color: mode == currentMode
@@ -180,7 +226,11 @@ class SettingsScreen extends ConsumerWidget {
     );
   }
 
-  void _showResetDialog(BuildContext context, WidgetRef ref) {
+  void _showResetDialog(
+    BuildContext context,
+    WidgetRef ref,
+    AppLocalizations l10n,
+  ) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -191,7 +241,7 @@ class SettingsScreen extends ConsumerWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(l10n.cancel),
           ),
           FilledButton(
             onPressed: () {

@@ -2,6 +2,49 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/api_client.dart';
 import '../../core/websocket_service.dart';
 
+/// Decode HTML entities in text.
+String decodeHtmlEntities(String text) {
+  return text
+      // Basic HTML entities
+      .replaceAll('&amp;', '&')
+      .replaceAll('&lt;', '<')
+      .replaceAll('&gt;', '>')
+      .replaceAll('&quot;', '"')
+      .replaceAll('&#039;', "'")
+      .replaceAll('&apos;', "'")
+      .replaceAll('&nbsp;', ' ')
+      // Common special characters
+      .replaceAll('&Auml;', 'Ä')
+      .replaceAll('&auml;', 'ä')
+      .replaceAll('&Ouml;', 'Ö')
+      .replaceAll('&ouml;', 'ö')
+      .replaceAll('&Uuml;', 'Ü')
+      .replaceAll('&uuml;', 'ü')
+      .replaceAll('&szlig;', 'ß')
+      .replaceAll('&oslash;', 'ø')
+      .replaceAll('&Oslash;', 'Ø')
+      .replaceAll('&deg;', '°')
+      .replaceAll('&middot;', '·')
+      .replaceAll('&bull;', '•')
+      .replaceAll('&ndash;', '–')
+      .replaceAll('&mdash;', '—')
+      .replaceAll('&lsquo;', ''')
+      .replaceAll('&rsquo;', ''')
+      .replaceAll('&ldquo;', '"')
+      .replaceAll('&rdquo;', '"')
+      .replaceAll('&euro;', '€')
+      .replaceAll('&pound;', '£')
+      .replaceAll('&yen;', '¥')
+      .replaceAll('&copy;', '©')
+      .replaceAll('&reg;', '®')
+      .replaceAll('&trade;', '™')
+      // Strip HTML tags
+      .replaceAll(RegExp(r'<[^>]*>'), '')
+      // Clean up whitespace
+      .replaceAll(RegExp(r'\s+'), ' ')
+      .trim();
+}
+
 /// Product params model.
 /// Per SobroBase app/models/products.py ProductParams class.
 class ProductParams {
@@ -93,10 +136,12 @@ class Product {
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
+    final rawTitle = json['title'] as String;
+    final rawContent = json['content'] as String?;
     return Product(
       id: json['id'] as int,
-      title: json['title'] as String,
-      content: json['content'] as String?,
+      title: decodeHtmlEntities(rawTitle),
+      content: rawContent != null ? decodeHtmlEntities(rawContent) : null,
       price: (json['price'] as num?)?.toDouble(),
       purchasePrice: (json['purchase_price'] as num?)?.toDouble(),
       purchaseCurrency: json['purchase_currency'] as String? ?? 'USD',
@@ -104,7 +149,9 @@ class Product {
       auctionCurrency: json['auction_currency'] as String? ?? 'USD',
       directSalePrice: (json['direct_sale_price'] as num?)?.toDouble(),
       directCurrency: json['direct_currency'] as String? ?? 'USD',
-      categoryName: json['category_name'] as String?,
+      categoryName: json['category_name'] != null
+          ? decodeHtmlEntities(json['category_name'] as String)
+          : null,
       categoryId: json['category_id'] as int?,
       files:
           (json['files'] as List<dynamic>?)

@@ -22,6 +22,8 @@ final routerProvider = Provider<GoRouter>((ref) {
 
   return GoRouter(
     initialLocation: '/login',
+    restorationScopeId:
+        null, // Disable state restoration - fixes navigation bug
     redirect: (context, state) {
       final isAuthenticated = authState is AuthAuthenticated;
       final isLoggingIn = state.matchedLocation == '/login';

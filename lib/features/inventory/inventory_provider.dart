@@ -275,3 +275,22 @@ final inventoryDetailProvider = FutureProvider.family<InventoryItem, int>((
   }
   throw Exception('Failed to load item');
 });
+
+/// Client inventory provider - fetches inventory items for a specific client.
+final clientInventoryProvider = FutureProvider.family<List<InventoryItem>, int>(
+  (ref, clientId) async {
+    final dio = ref.read(dioProvider);
+    final response = await dio.get(
+      '/inventory',
+      queryParameters: {'client_id': clientId, 'per_page': 50},
+    );
+    if (response.statusCode == 200) {
+      final data = response.data as Map<String, dynamic>;
+      final items = (data['items'] as List)
+          .map((j) => InventoryItem.fromJson(j))
+          .toList();
+      return items;
+    }
+    throw Exception('Failed to load client inventory');
+  },
+);

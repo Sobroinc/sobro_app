@@ -156,33 +156,38 @@ class _InventoryTabState extends ConsumerState<InventoryTab> {
       );
     }
 
-    return RefreshIndicator(
-      onRefresh: () => ref.read(inventoryProvider.notifier).refresh(),
-      child: ListView.builder(
-        controller: _scrollController,
-        padding: const EdgeInsets.all(16),
-        itemCount: state.items.length + (state.hasMore ? 1 : 0),
-        itemBuilder: (context, index) {
-          if (index >= state.items.length) {
-            return const Center(
-              child: Padding(
-                padding: EdgeInsets.all(16),
-                child: CircularProgressIndicator(),
-              ),
-            );
-          }
-          return _InventoryCard(
-            item: state.items[index],
-            onTap: () {
-              final item = state.items[index];
-              if (item.isGroup) {
-                ref.read(inventoryProvider.notifier).openGroup(item.id);
-              } else {
-                context.push('/inventory/${item.id}');
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 800),
+        child: RefreshIndicator(
+          onRefresh: () => ref.read(inventoryProvider.notifier).refresh(),
+          child: ListView.builder(
+            controller: _scrollController,
+            padding: const EdgeInsets.all(16),
+            itemCount: state.items.length + (state.hasMore ? 1 : 0),
+            itemBuilder: (context, index) {
+              if (index >= state.items.length) {
+                return const Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(16),
+                    child: CircularProgressIndicator(),
+                  ),
+                );
               }
+              return _InventoryCard(
+                item: state.items[index],
+                onTap: () {
+                  final item = state.items[index];
+                  if (item.isGroup) {
+                    ref.read(inventoryProvider.notifier).openGroup(item.id);
+                  } else {
+                    context.push('/inventory/${item.id}');
+                  }
+                },
+              );
             },
-          );
-        },
+          ),
+        ),
       ),
     );
   }

@@ -100,46 +100,6 @@ class _ProductsTabState extends ConsumerState<ProductsTab> {
           ),
         ),
 
-        // Category filters
-        if (state.categories.isNotEmpty)
-          SizedBox(
-            height: 48,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              itemCount: state.categories.length + 1, // +1 for "All"
-              itemBuilder: (context, index) {
-                if (index == 0) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: FilterChip(
-                      label: const Text('All'),
-                      selected: state.categoryId == null,
-                      onSelected: (_) {
-                        ref
-                            .read(productsProvider.notifier)
-                            .filterByCategory(null);
-                      },
-                    ),
-                  );
-                }
-                final category = state.categories[index - 1];
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: FilterChip(
-                    label: Text('${category.name} (${category.count})'),
-                    selected: state.categoryId == category.id,
-                    onSelected: (_) {
-                      ref
-                          .read(productsProvider.notifier)
-                          .filterByCategory(category.id);
-                    },
-                  ),
-                );
-              },
-            ),
-          ),
-
         // Content
         Expanded(child: _buildContent(state)),
       ],

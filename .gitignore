@@ -39,3 +39,4 @@ coverage/
 # Environment
 .env
 *.env.local
+android/play-credentials.json

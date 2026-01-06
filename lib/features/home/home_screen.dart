@@ -3,11 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/auth_service.dart';
 import '../../core/websocket_service.dart';
-import '../products/products_screen.dart';
+import '../../core/l10n/app_localizations.dart';
 import '../inventory/inventory_screen.dart';
 import '../clients/clients_screen.dart';
-import '../auctions/auctions_screen.dart';
-import '../operations/operations_screen.dart';
+import '../chat/chat_drawer.dart';
 
 /// Current tab index notifier.
 /// Per Riverpod 3.x docs: https://riverpod.dev/docs/concepts/providers
@@ -49,10 +48,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final currentTab = ref.watch(currentTabProvider);
     final authState = ref.watch(authProvider);
     final user = authState is AuthAuthenticated ? authState.user : null;
+    final l10n = AppLocalizations.of(context);
 
     return Scaffold(
+      drawer: const ChatDrawer(),
       appBar: AppBar(
-        title: Text(_getTitle(currentTab)),
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: const Icon(Icons.smart_toy),
+            tooltip: 'AI Чат',
+            onPressed: () => Scaffold.of(context).openDrawer(),
+          ),
+        ),
+        title: Text(_getTitle(currentTab, l10n)),
         actions: [
           if (user != null)
             InkWell(
@@ -93,13 +101,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
       body: IndexedStack(
         index: currentTab,
-        children: const [
-          ProductsTab(),
-          InventoryTab(),
-          ClientsTab(),
-          AuctionsTab(),
-          OperationsTab(),
-        ],
+        children: const [InventoryTab(), ClientsTab()],
       ),
       floatingActionButton: _buildFab(currentTab),
       bottomNavigationBar: NavigationBar(
@@ -107,31 +109,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         onDestinationSelected: (index) {
           ref.read(currentTabProvider.notifier).setTab(index);
         },
-        destinations: const [
+        destinations: [
           NavigationDestination(
-            icon: Icon(Icons.inventory_2_outlined),
-            selectedIcon: Icon(Icons.inventory_2),
-            label: 'Products',
+            icon: const Icon(Icons.warehouse_outlined),
+            selectedIcon: const Icon(Icons.warehouse),
+            label: l10n.warehouse,
           ),
           NavigationDestination(
-            icon: Icon(Icons.warehouse_outlined),
-            selectedIcon: Icon(Icons.warehouse),
-            label: 'Inventory',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.people_outlined),
-            selectedIcon: Icon(Icons.people),
-            label: 'Clients',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.gavel_outlined),
-            selectedIcon: Icon(Icons.gavel),
-            label: 'Auctions',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.receipt_long_outlined),
-            selectedIcon: Icon(Icons.receipt_long),
-            label: 'Operations',
+            icon: const Icon(Icons.people_outlined),
+            selectedIcon: const Icon(Icons.people),
+            label: l10n.clients,
           ),
         ],
       ),
@@ -139,19 +126,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Widget? _buildFab(int currentTab) {
-    // Show FAB only for tabs that support creating new items
+    // Show FAB for both tabs
     switch (currentTab) {
-      case 0: // Products
-        return FloatingActionButton(
-          onPressed: () => context.push('/product/new'),
-          child: const Icon(Icons.add),
-        );
-      case 1: // Inventory
+      case 0: // Inventory/Склад
         return FloatingActionButton(
           onPressed: () => context.push('/inventory/new'),
           child: const Icon(Icons.add),
         );
-      case 2: // Clients
+      case 1: // Clients
         return FloatingActionButton(
           onPressed: () => context.push('/client/new'),
           child: const Icon(Icons.add),
@@ -161,18 +143,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     }
   }
 
-  String _getTitle(int index) {
+  String _getTitle(int index, AppLocalizations l10n) {
     switch (index) {
       case 0:
-        return 'Products';
+        return l10n.warehouse;
       case 1:
-        return 'Inventory';
-      case 2:
-        return 'Clients';
-      case 3:
-        return 'Auctions';
-      case 4:
-        return 'Operations';
+        return l10n.clients;
       default:
         return 'Sobro';
     }

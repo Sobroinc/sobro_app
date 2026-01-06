@@ -1,6 +1,9 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:dio/dio.dart';
 import '../../core/api_client.dart';
 import 'inventory_provider.dart';
 
@@ -40,6 +43,13 @@ class _InventoryFormScreenState extends ConsumerState<InventoryFormScreen> {
   bool _isGroup = false;
   bool _inCatalog = false;
 
+  // Photo handling
+  final ImagePicker _picker = ImagePicker();
+  final List<XFile> _productPhotos = [];
+  final List<XFile> _documentPhotos = [];
+  final List<String> _existingProductPhotos = [];
+  final List<String> _existingDocumentPhotos = [];
+
   final List<String> _conditions = ['New', 'Excellent', 'Good', 'Fair', 'Poor'];
 
   @override
@@ -65,6 +75,269 @@ class _InventoryFormScreenState extends ConsumerState<InventoryFormScreen> {
     _cityController.dispose();
     _notesController.dispose();
     super.dispose();
+  }
+
+  // Photo picking methods
+  Future<void> _pickProductPhoto(ImageSource source) async {
+    try {
+      final XFile? photo = await _picker.pickImage(
+        source: source,
+        maxWidth: 1920,
+        maxHeight: 1920,
+        imageQuality: 85,
+      );
+      if (photo != null) {
+        setState(() {
+          _productPhotos.add(photo);
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error picking photo: $e')));
+      }
+    }
+  }
+
+  Future<void> _pickDocumentPhoto(ImageSource source) async {
+    try {
+      final XFile? photo = await _picker.pickImage(
+        source: source,
+        maxWidth: 1920,
+        maxHeight: 1920,
+        imageQuality: 85,
+      );
+      if (photo != null) {
+        setState(() {
+          _documentPhotos.add(photo);
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error picking photo: $e')));
+      }
+    }
+  }
+
+  void _showPhotoSourceDialog(bool isProduct) {
+    showModalBottomSheet(
+      context: context,
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera_alt),
+              title: const Text('Камера'),
+              onTap: () {
+                Navigator.pop(ctx);
+                if (isProduct) {
+                  _pickProductPhoto(ImageSource.camera);
+                } else {
+                  _pickDocumentPhoto(ImageSource.camera);
+                }
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.photo_library),
+              title: const Text('Галерея'),
+              onTap: () {
+                Navigator.pop(ctx);
+                if (isProduct) {
+                  _pickProductPhoto(ImageSource.gallery);
+                } else {
+                  _pickDocumentPhoto(ImageSource.gallery);
+                }
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _removeProductPhoto(int index) {
+    setState(() {
+      _productPhotos.removeAt(index);
+    });
+  }
+
+  void _removeDocumentPhoto(int index) {
+    setState(() {
+      _documentPhotos.removeAt(index);
+    });
+  }
+
+  Future<List<String>> _uploadPhotos(List<XFile> photos) async {
+    if (photos.isEmpty) return [];
+
+    final dio = ref.read(dioProvider);
+    final List<String> urls = [];
+
+    // Upload all photos at once using 'files' field (backend expects list)
+    final List<MultipartFile> multipartFiles = [];
+    for (final photo in photos) {
+      multipartFiles.add(
+        await MultipartFile.fromFile(photo.path, filename: photo.name),
+      );
+    }
+
+    final formData = FormData.fromMap({'files': multipartFiles});
+
+    final response = await dio.post('/inventory/upload', data: formData);
+    if (response.statusCode == 200) {
+      final data = response.data as Map<String, dynamic>;
+      if (data['urls'] != null) {
+        urls.addAll((data['urls'] as List).map((e) => e.toString()));
+      }
+    }
+
+    return urls;
+  }
+
+  Widget _buildPhotoGrid({
+    required List<XFile> photos,
+    required List<String> existingUrls,
+    required VoidCallback onAdd,
+    required void Function(int) onRemove,
+    required void Function(int) onRemoveExisting,
+  }) {
+    final totalCount = existingUrls.length + photos.length;
+
+    return SizedBox(
+      height: 120,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: totalCount + 1, // +1 for add button
+        itemBuilder: (context, index) {
+          // Add button at the end
+          if (index == totalCount) {
+            return Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: InkWell(
+                onTap: onAdd,
+                borderRadius: BorderRadius.circular(12),
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Theme.of(context).colorScheme.outline,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.add_a_photo,
+                        size: 32,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Добавить',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }
+
+          // Existing photos from server
+          if (index < existingUrls.length) {
+            return Padding(
+              padding: const EdgeInsets.only(right: 8),
+              child: Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.network(
+                      existingUrls[index],
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, _, _) => Container(
+                        width: 100,
+                        height: 100,
+                        color: Colors.grey[300],
+                        child: const Icon(Icons.broken_image),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 4,
+                    right: 4,
+                    child: InkWell(
+                      onTap: () => onRemoveExisting(index),
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.close,
+                          size: 16,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          // New photos (local files)
+          final photoIndex = index - existingUrls.length;
+          return Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.file(
+                    File(photos[photoIndex].path),
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Positioned(
+                  top: 4,
+                  right: 4,
+                  child: InkWell(
+                    onTap: () => onRemove(photoIndex),
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: const BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.close,
+                        size: 16,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
   }
 
   Future<void> _loadItem() async {
@@ -95,6 +368,13 @@ class _InventoryFormScreenState extends ConsumerState<InventoryFormScreen> {
         _condition = data['condition'] as String?;
         _isGroup = data['is_group'] as bool? ?? false;
         _inCatalog = data['in_catalog'] as bool? ?? false;
+
+        // Load existing photos (backend uses 'photos' field)
+        if (data['photos'] != null) {
+          _existingProductPhotos.addAll(
+            (data['photos'] as List).map((e) => e.toString()),
+          );
+        }
       }
 
       setState(() {
@@ -164,6 +444,26 @@ class _InventoryFormScreenState extends ConsumerState<InventoryFormScreen> {
       }
       if (widget.parentGroupId != null) {
         data['parent_id'] = widget.parentGroupId;
+      }
+
+      // Upload photos - combine product and document photos into 'photos' field
+      final List<String> allPhotos = [
+        ..._existingProductPhotos,
+        ..._existingDocumentPhotos,
+      ];
+
+      if (_productPhotos.isNotEmpty) {
+        final productUrls = await _uploadPhotos(_productPhotos);
+        allPhotos.addAll(productUrls);
+      }
+
+      if (_documentPhotos.isNotEmpty) {
+        final documentUrls = await _uploadPhotos(_documentPhotos);
+        allPhotos.addAll(documentUrls);
+      }
+
+      if (allPhotos.isNotEmpty) {
+        data['photos'] = allPhotos;
       }
 
       if (widget.isEditing) {
@@ -519,7 +819,51 @@ class _InventoryFormScreenState extends ConsumerState<InventoryFormScreen> {
               ),
               maxLines: 3,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 24),
+
+            // Product Photos Section
+            if (!_isGroup) ...[
+              Text(
+                'Фото товара',
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 12),
+              _buildPhotoGrid(
+                photos: _productPhotos,
+                existingUrls: _existingProductPhotos,
+                onAdd: () => _showPhotoSourceDialog(true),
+                onRemove: _removeProductPhoto,
+                onRemoveExisting: (index) {
+                  setState(() {
+                    _existingProductPhotos.removeAt(index);
+                  });
+                },
+              ),
+              const SizedBox(height: 24),
+
+              // Document Photos Section
+              Text(
+                'Документация',
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 12),
+              _buildPhotoGrid(
+                photos: _documentPhotos,
+                existingUrls: _existingDocumentPhotos,
+                onAdd: () => _showPhotoSourceDialog(false),
+                onRemove: _removeDocumentPhoto,
+                onRemoveExisting: (index) {
+                  setState(() {
+                    _existingDocumentPhotos.removeAt(index);
+                  });
+                },
+              ),
+              const SizedBox(height: 16),
+            ],
 
             // In catalog toggle
             SwitchListTile(
