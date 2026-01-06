@@ -5,11 +5,7 @@ class LoadingStateWidget extends StatelessWidget {
   final String? message;
   final double size;
 
-  const LoadingStateWidget({
-    super.key,
-    this.message,
-    this.size = 40,
-  });
+  const LoadingStateWidget({super.key, this.message, this.size = 40});
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +23,8 @@ class LoadingStateWidget extends StatelessWidget {
             Text(
               message!,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
             ),
           ],
         ],

@@ -44,10 +44,7 @@ class AuthInterceptor extends Interceptor {
   AuthInterceptor(this._ref);
 
   @override
-  void onRequest(
-    RequestOptions options,
-    RequestInterceptorHandler handler,
-  ) {
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     // Delegate async work to separate method
     _handleRequest(options, handler);
   }
@@ -66,9 +63,7 @@ class AuthInterceptor extends Interceptor {
 
       handler.next(options);
     } catch (e) {
-      handler.reject(
-        DioException(requestOptions: options, error: e),
-      );
+      handler.reject(DioException(requestOptions: options, error: e));
     }
   }
 
